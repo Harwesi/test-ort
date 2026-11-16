@@ -1,0 +1,2823 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#46178f">
+  <meta name="description" content="Математика боюнча 30 суроодон турган интерактивдүү Kahoot-викторина. ОРТ / Кыргыз тести — Вариант 05.">
+  <title>Математика · ОРТ Вариант 05 | Викторина</title>
+  <style>
+    :root {
+      --purple: #46178f;
+      --purple-deep: #2c0a5e;
+      --purple-light: #7c43d9;
+      --ink: #1d0a38;
+      --cream: #fff9ea;
+      --yellow: #ffd23f;
+      --yellow-deep: #e5a500;
+      --red: #e21b3c;
+      --blue: #1368ce;
+      --green: #26890c;
+      --white: #ffffff;
+      --muted: rgba(255, 249, 234, 0.68);
+      --line: rgba(255, 255, 255, 0.14);
+      --glass: rgba(255, 255, 255, 0.08);
+      --shadow-lg: 0 30px 80px rgba(19, 0, 48, 0.45);
+      --shadow-card: 0 8px 0 rgba(24, 0, 53, 0.26), 0 16px 30px rgba(24, 0, 53, 0.18);
+      --radius-xl: 32px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --font-display: "Arial Black", "Segoe UI Black", "Trebuchet MS", system-ui, sans-serif;
+      --font-body: "Segoe UI", "Trebuchet MS", system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--purple);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      color: var(--cream);
+      font-family: var(--font-body);
+      background:
+        radial-gradient(900px 600px at 8% -8%, rgba(131, 74, 222, 0.72) 0%, transparent 55%),
+        radial-gradient(800px 540px at 104% 8%, rgba(112, 48, 205, 0.62) 0%, transparent 58%),
+        radial-gradient(700px 500px at 50% 112%, rgba(255, 210, 63, 0.12) 0%, transparent 65%),
+        linear-gradient(135deg, #521c9f 0%, #46178f 48%, #381070 100%);
+      background-attachment: fixed;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.7) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 75%);
+      -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent 75%);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .ambient::before,
+    .ambient::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(4px);
+      opacity: 0.22;
+    }
+
+    .ambient::before {
+      width: 360px;
+      height: 360px;
+      left: -130px;
+      bottom: -130px;
+      background: radial-gradient(circle at 35% 35%, #ffd23f, transparent 68%);
+      animation: drift 16s ease-in-out infinite;
+    }
+
+    .ambient::after {
+      width: 300px;
+      height: 300px;
+      right: -100px;
+      top: 28%;
+      background: radial-gradient(circle at 50% 50%, #a66bff, transparent 70%);
+      animation: drift 20s ease-in-out infinite reverse;
+    }
+
+    .math-symbol {
+      position: absolute;
+      color: rgba(255, 255, 255, 0.09);
+      font-family: var(--font-display);
+      font-weight: 900;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .math-symbol.s1 { left: 5%; top: 17%; font-size: 116px; transform: rotate(-12deg); }
+    .math-symbol.s2 { right: 7%; top: 12%; font-size: 92px; transform: rotate(9deg); }
+    .math-symbol.s3 { left: 43%; bottom: 6%; font-size: 110px; transform: rotate(6deg); }
+    .math-symbol.s4 { right: 3%; bottom: 18%; font-size: 75px; transform: rotate(-8deg); }
+    .math-symbol.s5 { left: 15%; bottom: 13%; font-size: 64px; transform: rotate(14deg); }
+
+    .screen {
+      position: relative;
+      z-index: 1;
+      display: none;
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100dvh;
+    }
+
+    .screen.is-active {
+      display: flex;
+      animation: screenIn 0.45s ease both;
+    }
+
+    /* ---------- START SCREEN ---------- */
+
+    .start-screen {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(24px, 4vw, 54px) clamp(18px, 4vw, 48px);
+    }
+
+    .start-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1.16fr) minmax(330px, 0.84fr);
+      align-items: center;
+      gap: clamp(32px, 5.5vw, 82px);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .start-hero {
+      animation: riseIn 0.65s 0.08s ease both;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      color: var(--yellow);
+      font-size: clamp(0.68rem, 0.95vw, 0.79rem);
+      font-weight: 800;
+      letter-spacing: 0.17em;
+      line-height: 1.4;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 30px;
+      height: 2px;
+      border-radius: 99px;
+      background: currentColor;
+    }
+
+    .hero-title {
+      margin: 20px 0 20px;
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: clamp(3.1rem, 5.4vw, 4.65rem);
+      font-weight: 900;
+      letter-spacing: -0.065em;
+      line-height: 0.88;
+      text-transform: uppercase;
+      text-wrap: balance;
+      text-shadow: 0 7px 0 rgba(36, 5, 75, 0.24);
+    }
+
+    .hero-title span {
+      display: block;
+      color: var(--yellow);
+    }
+
+    .hero-lead {
+      max-width: 550px;
+      margin: 0;
+      color: rgba(255, 249, 234, 0.82);
+      font-size: clamp(0.98rem, 1.35vw, 1.12rem);
+      line-height: 1.65;
+    }
+
+    .hero-lead strong {
+      color: var(--white);
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 28px;
+    }
+
+    .stat-chip {
+      display: flex;
+      align-items: baseline;
+      gap: 9px;
+      padding: 11px 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-chip b {
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      line-height: 1;
+    }
+
+    .stat-chip span {
+      color: var(--muted);
+      font-size: 0.76rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero-topics {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-top: 24px;
+      color: rgba(255, 249, 234, 0.5);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .hero-topics svg {
+      flex: 0 0 auto;
+      width: 16px;
+      height: 16px;
+      color: var(--yellow);
+    }
+
+    .start-card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(25px, 3vw, 38px);
+      border: 1px solid rgba(255, 255, 255, 0.75);
+      border-radius: var(--radius-xl);
+      color: var(--ink);
+      background:
+        radial-gradient(400px 220px at 100% 0%, rgba(255, 210, 63, 0.18), transparent 62%),
+        #fffaf0;
+      box-shadow: var(--shadow-lg);
+      animation: riseIn 0.7s 0.2s ease both;
+    }
+
+    .start-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 7px;
+      background: linear-gradient(90deg, var(--red) 0 25%, var(--blue) 25% 50%, var(--yellow) 50% 75%, var(--green) 75% 100%);
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .logo-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 13px);
+      grid-template-rows: repeat(2, 13px);
+      gap: 4px;
+      transform: rotate(-5deg);
+    }
+
+    .logo-grid i {
+      display: block;
+      border-radius: 4px;
+    }
+
+    .logo-grid i:nth-child(1) { background: var(--red); }
+    .logo-grid i:nth-child(2) { background: var(--blue); }
+    .logo-grid i:nth-child(3) { background: var(--yellow); }
+    .logo-grid i:nth-child(4) { background: var(--green); }
+
+    .variant-chip {
+      padding: 7px 11px;
+      border: 1px solid rgba(70, 23, 143, 0.16);
+      border-radius: 999px;
+      color: #5e3a91;
+      background: rgba(70, 23, 143, 0.06);
+      font-size: 0.69rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .start-card h2 {
+      margin: 0 0 8px;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: clamp(1.65rem, 2.7vw, 2.15rem);
+      letter-spacing: -0.04em;
+      line-height: 1.08;
+    }
+
+    .start-card .card-subtitle {
+      margin: 0 0 24px;
+      color: #705d8a;
+      font-size: 0.9rem;
+      line-height: 1.55;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #4d346f;
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .name-input {
+      width: 100%;
+      height: 54px;
+      padding: 0 16px;
+      border: 2px solid #e5dcf2;
+      border-radius: 14px;
+      outline: none;
+      color: var(--ink);
+      background: var(--white);
+      font-size: 1rem;
+      font-weight: 600;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .name-input::placeholder {
+      color: #a799b9;
+      font-weight: 500;
+    }
+
+    .name-input:focus {
+      border-color: var(--purple-light);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(124, 67, 217, 0.14);
+    }
+
+    .btn-start {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 13px;
+      width: 100%;
+      min-height: 60px;
+      margin-top: 13px;
+      padding: 15px 20px;
+      border: 0;
+      border-radius: 15px;
+      color: #2b1900;
+      background: linear-gradient(135deg, #ffdd55, var(--yellow) 52%, #f4bb14);
+      box-shadow: 0 6px 0 #ba8000, 0 14px 24px rgba(207, 148, 0, 0.24);
+      cursor: pointer;
+      font-family: var(--font-display);
+      font-size: 1.07rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+    }
+
+    .btn-start svg {
+      width: 23px;
+      height: 23px;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-start:hover {
+      filter: brightness(1.04);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 0 #ba8000, 0 18px 30px rgba(207, 148, 0, 0.3);
+    }
+
+    .btn-start:hover svg {
+      transform: translateX(4px);
+    }
+
+    .btn-start:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #ba8000, 0 8px 14px rgba(207, 148, 0, 0.2);
+    }
+
+    .card-rules {
+      display: grid;
+      gap: 9px;
+      margin: 23px 0 0;
+      padding: 18px 0 0;
+      border-top: 1px dashed #ded3ed;
+      list-style: none;
+    }
+
+    .card-rules li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: #6d5b84;
+      font-size: 0.79rem;
+      line-height: 1.45;
+    }
+
+    .rule-dot {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: 19px;
+      height: 19px;
+      margin-top: 1px;
+      border-radius: 50%;
+      color: #1d4e12;
+      background: #dff3d8;
+      font-size: 0.67rem;
+      font-weight: 900;
+    }
+
+    .card-rules b {
+      color: #40285f;
+      font-weight: 800;
+    }
+
+    .start-foot {
+      width: min(1180px, 100%);
+      margin: 26px auto 0;
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      color: rgba(255, 249, 234, 0.42);
+      font-size: 0.71rem;
+      letter-spacing: 0.06em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    /* ---------- QUIZ SCREEN ---------- */
+
+    .quiz-screen {
+      flex-direction: column;
+      padding: clamp(14px, 2.2vw, 24px) clamp(14px, 3vw, 30px) clamp(18px, 2.5vw, 28px);
+    }
+
+    .quiz-shell {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 13px;
+      width: min(1080px, 100%);
+      min-height: calc(100dvh - clamp(36px, 5vw, 52px));
+      margin: 0 auto;
+    }
+
+    .quiz-top {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .brand-mini {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 10px;
+      color: rgba(255, 249, 234, 0.9);
+      font-family: var(--font-display);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .brand-mini .logo-grid {
+      transform: none;
+    }
+
+    .brand-mini .logo-grid,
+    .brand-mini .logo-grid i {
+      width: 9px;
+      height: 9px;
+    }
+
+    .brand-mini .logo-grid {
+      grid-template-columns: repeat(2, 9px);
+      grid-template-rows: repeat(2, 9px);
+      gap: 3px;
+    }
+
+    .brand-mini .logo-grid i {
+      border-radius: 2.5px;
+    }
+
+    .top-progress {
+      flex: 1;
+      height: 7px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: inset 0 1px 2px rgba(20, 0, 45, 0.2);
+    }
+
+    .top-progress span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ffd23f, #ff9a4a);
+      box-shadow: 0 0 14px rgba(255, 210, 63, 0.5);
+      transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .score-pill {
+      display: flex;
+      align-items: center;
+      flex: 0 0 auto;
+      gap: 10px;
+      min-width: 116px;
+      padding: 8px 13px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+    }
+
+    .score-pill span {
+      color: rgba(255, 249, 234, 0.58);
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .score-pill strong {
+      margin-left: auto;
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      letter-spacing: -0.02em;
+    }
+
+    .score-pill.bump {
+      animation: scoreBump 0.42s ease;
+    }
+
+    .quiz-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 28px;
+    }
+
+    .category-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      max-width: 60%;
+      padding: 6px 12px;
+      border-radius: 999px;
+      color: #2b1900;
+      background: var(--yellow);
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.06em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .category-pill::before {
+      content: "";
+      flex: 0 0 auto;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #2b1900;
+      opacity: 0.7;
+    }
+
+    .question-counter {
+      color: rgba(255, 249, 234, 0.62);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .question-counter b {
+      color: var(--white);
+      font-weight: 900;
+    }
+
+    .streak-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-left: auto;
+      padding: 5px 10px;
+      border: 1px solid rgba(255, 210, 63, 0.3);
+      border-radius: 999px;
+      color: #ffe9a4;
+      background: rgba(255, 210, 63, 0.1);
+      font-size: 0.7rem;
+      font-weight: 900;
+      animation: popIn 0.3s ease both;
+    }
+
+    .streak-chip svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .quiz-main {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      justify-content: center;
+      gap: clamp(12px, 1.8vw, 18px);
+    }
+
+    .quiz-main.q-enter {
+      animation: questionIn 0.38s ease both;
+    }
+
+    .question-head {
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 2.4vw, 26px);
+      padding: clamp(16px, 2.3vw, 26px);
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      border-radius: var(--radius-lg);
+      background: rgba(37, 8, 77, 0.3);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(8px);
+    }
+
+    .timer-wrap {
+      position: relative;
+      flex: 0 0 auto;
+      width: clamp(78px, 8.6vw, 106px);
+      height: clamp(78px, 8.6vw, 106px);
+    }
+
+    .timer-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .timer-track,
+    .timer-ring {
+      fill: none;
+      stroke-width: 8;
+    }
+
+    .timer-track {
+      stroke: rgba(255, 255, 255, 0.13);
+    }
+
+    .timer-ring {
+      stroke: var(--yellow);
+      stroke-linecap: round;
+      stroke-dasharray: 100;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 0.12s linear, stroke 0.3s ease;
+      filter: drop-shadow(0 0 5px rgba(255, 210, 63, 0.28));
+    }
+
+    .timer-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.3vw, 1.9rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .timer-center small {
+      margin-top: 3px;
+      color: rgba(255, 249, 234, 0.48);
+      font-family: var(--font-body);
+      font-size: 0.5rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .timer-wrap.is-danger .timer-ring {
+      stroke: #ff5c78;
+      filter: drop-shadow(0 0 8px rgba(255, 92, 120, 0.45));
+    }
+
+    .timer-wrap.is-danger .timer-center {
+      color: #ffadba;
+      animation: timerPulse 0.85s ease-in-out infinite;
+    }
+
+    .question-copy {
+      min-width: 0;
+    }
+
+    .question-label {
+      margin: 0 0 7px;
+      color: rgba(255, 249, 234, 0.45);
+      font-size: 0.63rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .question-text {
+      margin: 0;
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: clamp(1.28rem, 2.55vw, 2.08rem);
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(10px, 1.6vw, 16px);
+    }
+
+    .answer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: clamp(11px, 1.5vw, 17px);
+      min-height: clamp(82px, 11.5vh, 116px);
+      padding: 18px clamp(16px, 2vw, 24px);
+      overflow: hidden;
+      border: 0;
+      border-radius: 18px;
+      color: var(--white);
+      box-shadow: var(--shadow-card);
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.18s ease, opacity 0.22s ease;
+    }
+
+    .answer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 48%);
+    }
+
+    .answer:nth-child(1) {
+      background: linear-gradient(135deg, #ff3558 0%, #e21b3c 52%, #c90d2c 100%);
+    }
+
+    .answer:nth-child(2) {
+      background: linear-gradient(135deg, #2585ed 0%, #1368ce 55%, #0c51a8 100%);
+    }
+
+    .answer:nth-child(3) {
+      color: #2d1b00;
+      background: linear-gradient(135deg, #ffdc5c 0%, #ffc21c 55%, #e4a500 100%);
+      box-shadow: 0 8px 0 #a87300, 0 16px 30px rgba(24, 0, 53, 0.18);
+    }
+
+    .answer:nth-child(4) {
+      background: linear-gradient(135deg, #3bad2c 0%, #26890c 55%, #1a6b07 100%);
+    }
+
+    .answer:hover:not(:disabled) {
+      transform: translateY(-3px);
+      filter: brightness(1.07);
+      box-shadow: 0 11px 0 rgba(24, 0, 53, 0.24), 0 20px 36px rgba(24, 0, 53, 0.24);
+    }
+
+    .answer:active:not(:disabled) {
+      transform: translateY(3px);
+      box-shadow: 0 4px 0 rgba(24, 0, 53, 0.24), 0 8px 16px rgba(24, 0, 53, 0.16);
+    }
+
+    .answer:focus-visible {
+      outline: 4px solid #ffffff;
+      outline-offset: 3px;
+    }
+
+    .answer:disabled {
+      cursor: default;
+    }
+
+    .answer-symbol {
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      width: clamp(31px, 3.5vw, 42px);
+      height: clamp(31px, 3.5vw, 42px);
+      color: rgba(255, 255, 255, 0.94);
+      filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.12));
+    }
+
+    .answer:nth-child(3) .answer-symbol {
+      color: rgba(45, 27, 0, 0.86);
+      filter: none;
+    }
+
+    .answer-symbol svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .answer-text {
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+      font-size: clamp(1.13rem, 2.15vw, 1.66rem);
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      overflow-wrap: anywhere;
+    }
+
+    .key-hint {
+      position: absolute;
+      top: 9px;
+      right: 11px;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      color: rgba(255, 255, 255, 0.64);
+      font-size: 0.58rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .answer:nth-child(3) .key-hint {
+      border-color: rgba(45, 27, 0, 0.26);
+      color: rgba(45, 27, 0, 0.58);
+    }
+
+    .verdict {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      z-index: 2;
+      display: none;
+      place-items: center;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      color: #143210;
+      background: #ffffff;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+      font-size: 0.86rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .answer:disabled .key-hint {
+      display: none;
+    }
+
+    .answer.is-correct {
+      z-index: 1;
+      outline: 4px solid rgba(255, 255, 255, 0.96);
+      outline-offset: 3px;
+      filter: brightness(1.1) saturate(1.08);
+      animation: correctPop 0.42s ease both;
+    }
+
+    .answer.is-correct .verdict {
+      display: grid;
+    }
+
+    .answer.is-correct .verdict::before {
+      content: "✓";
+    }
+
+    .answer.is-wrong {
+      opacity: 0.9;
+      filter: grayscale(0.25) brightness(0.82);
+      animation: shake 0.36s ease both;
+    }
+
+    .answer.is-wrong .verdict {
+      display: grid;
+      color: #8d1026;
+    }
+
+    .answer.is-wrong .verdict::before {
+      content: "✕";
+    }
+
+    .answer.is-dimmed {
+      opacity: 0.3;
+      filter: grayscale(0.4);
+      transform: scale(0.985);
+    }
+
+    .feedback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 7px 13px;
+      min-height: 50px;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      opacity: 0;
+      color: var(--cream);
+      font-size: 0.94rem;
+      line-height: 1.35;
+      text-align: center;
+      transform: translateY(5px);
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+
+    .feedback.show {
+      opacity: 1;
+      transform: none;
+    }
+
+    .feedback strong {
+      font-family: var(--font-display);
+      font-size: 1.02rem;
+      letter-spacing: -0.02em;
+    }
+
+    .feedback--correct {
+      border-color: rgba(92, 224, 122, 0.26);
+      color: #c6ffd2;
+      background: rgba(46, 150, 70, 0.18);
+    }
+
+    .feedback--wrong {
+      border-color: rgba(255, 112, 137, 0.26);
+      color: #ffd3db;
+      background: rgba(185, 25, 55, 0.2);
+    }
+
+    .feedback .next-label {
+      color: rgba(255, 249, 234, 0.5);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    /* ---------- RESULTS SCREEN ---------- */
+
+    .results-screen {
+      align-items: flex-start;
+      justify-content: center;
+      padding: clamp(20px, 4vw, 44px) clamp(14px, 3vw, 30px);
+    }
+
+    .results-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 17px;
+      width: min(900px, 100%);
+      margin: auto;
+    }
+
+    .result-card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 4vw, 42px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: var(--radius-xl);
+      color: var(--ink);
+      background:
+        radial-gradient(500px 260px at 100% 0%, rgba(255, 210, 63, 0.16), transparent 62%),
+        radial-gradient(400px 240px at 0% 100%, rgba(124, 67, 217, 0.09), transparent 64%),
+        #fffaf0;
+      box-shadow: var(--shadow-lg);
+      animation: riseIn 0.55s ease both;
+    }
+
+    .result-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 7px;
+      background: linear-gradient(90deg, var(--red) 0 25%, var(--blue) 25% 50%, var(--yellow) 50% 75%, var(--green) 75% 100%);
+    }
+
+    .result-hero {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(20px, 4vw, 34px);
+    }
+
+    .result-ring-wrap {
+      position: relative;
+      flex: 0 0 auto;
+      width: clamp(132px, 17vw, 174px);
+      height: clamp(132px, 17vw, 174px);
+    }
+
+    .result-ring-svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .result-ring-track,
+    .result-ring-value {
+      fill: none;
+      stroke-width: 9;
+      stroke-linecap: round;
+    }
+
+    .result-ring-track {
+      stroke: #eadff7;
+    }
+
+    .result-ring-value {
+      stroke: url(#resultGradient);
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      transition: stroke-dashoffset 1.15s cubic-bezier(0.22, 1, 0.36, 1);
+      filter: drop-shadow(0 3px 4px rgba(70, 23, 143, 0.16));
+    }
+
+    .result-ring-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--purple);
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 2.9vw, 2.1rem);
+      letter-spacing: -0.05em;
+      line-height: 1;
+    }
+
+    .result-ring-center small {
+      margin-top: 5px;
+      color: #8c78a4;
+      font-family: var(--font-body);
+      font-size: 0.55rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .result-kicker {
+      margin: 0 0 8px;
+      color: #7c5aa7;
+      font-size: 0.67rem;
+      font-weight: 900;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .result-title {
+      margin: 0 0 9px;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4.2vw, 3.25rem);
+      letter-spacing: -0.05em;
+      line-height: 0.98;
+    }
+
+    .result-message {
+      max-width: 440px;
+      margin: 0;
+      color: #6f5b87;
+      font-size: clamp(0.87rem, 1.3vw, 0.96rem);
+      line-height: 1.55;
+    }
+
+    .result-player {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      color: #543573;
+      background: #f0e8fb;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .result-player span {
+      color: #917cab;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .score-line {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px;
+      margin: 27px 0 5px;
+      padding: 18px 15px;
+      border-top: 1px solid #eadff4;
+      border-bottom: 1px solid #eadff4;
+    }
+
+    .score-line > span:first-child {
+      color: #8a73a3;
+      font-size: 0.68rem;
+      font-weight: 900;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+
+    .score-line strong {
+      color: var(--purple);
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      letter-spacing: -0.045em;
+      line-height: 1;
+    }
+
+    .score-line .score-max {
+      color: #a38eb9;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .result-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 17px;
+    }
+
+    .result-stat {
+      padding: 15px 12px;
+      border: 1px solid #e9dff5;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.68);
+      text-align: center;
+    }
+
+    .result-stat span {
+      display: block;
+      margin-bottom: 5px;
+      color: #8f7ba5;
+      font-size: 0.61rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .result-stat strong {
+      color: #3f2364;
+      font-family: var(--font-display);
+      font-size: clamp(1.25rem, 2.2vw, 1.55rem);
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .result-actions {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.86fr;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 50px;
+      padding: 12px 16px;
+      border: 0;
+      border-radius: 13px;
+      cursor: pointer;
+      font-size: 0.83rem;
+      font-weight: 900;
+      letter-spacing: 0.01em;
+      line-height: 1.2;
+      text-align: center;
+      transition: transform 0.16s ease, filter 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--purple-light);
+      outline-offset: 3px;
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, #6030b1, var(--purple));
+      box-shadow: 0 4px 0 #2e0b60;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.08);
+      box-shadow: 0 6px 0 #2e0b60;
+    }
+
+    .btn-secondary {
+      color: #4d2b75;
+      background: #f0e7fb;
+      box-shadow: inset 0 0 0 1px #dfd0f0;
+    }
+
+    .btn-secondary:hover {
+      background: #e8dcf8;
+    }
+
+    .btn-ghost {
+      color: #7d688f;
+      background: transparent;
+      box-shadow: inset 0 0 0 1px #ded2ec;
+    }
+
+    .btn-ghost:hover {
+      background: #f5eefb;
+    }
+
+    .btn svg {
+      flex: 0 0 auto;
+      width: 17px;
+      height: 17px;
+    }
+
+    .review-panel {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(35, 8, 72, 0.3);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      backdrop-filter: blur(9px);
+      animation: riseIn 0.35s ease both;
+    }
+
+    .review-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .review-heading h2 {
+      margin: 0;
+      color: var(--white);
+      font-family: var(--font-display);
+      font-size: 1.06rem;
+      letter-spacing: -0.02em;
+    }
+
+    .review-heading p {
+      margin: 4px 0 0;
+      color: rgba(255, 249, 234, 0.48);
+      font-size: 0.7rem;
+    }
+
+    .review-list {
+      display: grid;
+      gap: 8px;
+      max-height: min(56vh, 630px);
+      padding: 12px;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+      scrollbar-width: thin;
+    }
+
+    .review-item {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr) 25px;
+      gap: 11px;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 13px;
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .review-item.is-wrong {
+      border-color: rgba(255, 112, 137, 0.17);
+      background: rgba(185, 25, 55, 0.09);
+    }
+
+    .review-num {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      color: rgba(255, 249, 234, 0.72);
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 0.68rem;
+      font-weight: 900;
+    }
+
+    .review-item.is-wrong .review-num {
+      color: #ffb5c2;
+      background: rgba(255, 112, 137, 0.12);
+    }
+
+    .review-body {
+      min-width: 0;
+    }
+
+    .review-cat {
+      display: block;
+      margin-bottom: 3px;
+      color: rgba(255, 210, 63, 0.72);
+      font-size: 0.55rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .review-question {
+      margin: 0 0 5px;
+      color: rgba(255, 249, 234, 0.93);
+      font-size: 0.78rem;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .review-answer {
+      margin: 0;
+      color: rgba(255, 249, 234, 0.58);
+      font-size: 0.69rem;
+      line-height: 1.5;
+    }
+
+    .review-answer b {
+      color: #bff6c9;
+      font-weight: 800;
+    }
+
+    .review-answer .bad {
+      color: #ffb4c1;
+    }
+
+    .review-explain {
+      margin: 4px 0 0;
+      color: rgba(255, 249, 234, 0.4);
+      font-size: 0.64rem;
+      line-height: 1.45;
+    }
+
+    .review-mark {
+      display: grid;
+      place-items: center;
+      align-self: start;
+      width: 23px;
+      height: 23px;
+      margin-top: 1px;
+      border-radius: 50%;
+      color: #173711;
+      background: #bff3b7;
+      font-size: 0.7rem;
+      font-weight: 900;
+    }
+
+    .review-item.is-wrong .review-mark {
+      color: #64101e;
+      background: #ffb3c1;
+    }
+
+    .confetti {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -24px;
+      width: 10px;
+      height: 16px;
+      opacity: 0;
+      animation: confettiDrop var(--fall-time, 3.8s) linear var(--delay, 0s) forwards;
+    }
+
+    /* ---------- ANIMATIONS ---------- */
+
+    @keyframes screenIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes riseIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes questionIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.84); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes scoreBump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.09); background: rgba(255, 210, 63, 0.2); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes timerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @keyframes correctPop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.035); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(5px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(2px); }
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(20px, -24px, 0) scale(1.08); }
+    }
+
+    @keyframes confettiDrop {
+      0% {
+        opacity: 1;
+        transform: translate3d(0, -20px, 0) rotate(0deg);
+      }
+      85% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift, 0px), 105vh, 0) rotate(var(--spin, 620deg));
+      }
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+
+    @media (max-width: 900px) {
+      .start-shell {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        width: min(650px, 100%);
+      }
+
+      .start-hero {
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: clamp(3rem, 8vw, 4.65rem);
+      }
+
+      .hero-lead {
+        margin-inline: auto;
+      }
+
+      .hero-stats,
+      .hero-topics {
+        justify-content: center;
+      }
+
+      .start-card {
+        width: min(520px, 100%);
+        margin-inline: auto;
+      }
+
+      .math-symbol.s1 { left: 2%; top: 12%; }
+      .math-symbol.s2 { right: 2%; top: 9%; }
+      .math-symbol.s3 { display: none; }
+    }
+
+    @media (max-width: 680px) {
+      .start-screen {
+        padding: 24px 15px 30px;
+      }
+
+      .hero-title {
+        margin-top: 16px;
+      }
+
+      .hero-stats {
+        gap: 8px;
+      }
+
+      .stat-chip {
+        padding: 8px 11px;
+      }
+
+      .stat-chip b {
+        font-size: 1.13rem;
+      }
+
+      .stat-chip span {
+        font-size: 0.62rem;
+      }
+
+      .hero-topics {
+        display: none;
+      }
+
+      .start-card {
+        padding: 24px 19px;
+        border-radius: 25px;
+      }
+
+      .card-head {
+        margin-bottom: 20px;
+      }
+
+      .quiz-shell {
+        gap: 10px;
+        min-height: calc(100dvh - 28px);
+      }
+
+      .quiz-top {
+        gap: 11px;
+      }
+
+      .brand-mini {
+        font-size: 0.64rem;
+      }
+
+      .brand-mini > span:last-child {
+        display: none;
+      }
+
+      .score-pill {
+        min-width: 98px;
+        padding: 7px 10px;
+      }
+
+      .score-pill span {
+        font-size: 0.55rem;
+      }
+
+      .score-pill strong {
+        font-size: 0.94rem;
+      }
+
+      .question-head {
+        gap: 13px;
+        padding: 14px;
+        border-radius: 18px;
+      }
+
+      .question-label {
+        margin-bottom: 4px;
+        font-size: 0.56rem;
+      }
+
+      .question-text {
+        font-size: clamp(1.12rem, 4.4vw, 1.45rem);
+        line-height: 1.3;
+      }
+
+      .answers {
+        grid-template-columns: 1fr;
+        gap: 9px;
+      }
+
+      .answer {
+        min-height: 67px;
+        padding: 13px 16px;
+        border-radius: 14px;
+      }
+
+      .answer-symbol {
+        width: 29px;
+        height: 29px;
+      }
+
+      .answer-text {
+        font-size: clamp(1.02rem, 4.2vw, 1.22rem);
+      }
+
+      .feedback {
+        min-height: 45px;
+        font-size: 0.83rem;
+      }
+
+      .result-hero {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .result-ring-wrap {
+        width: 130px;
+        height: 130px;
+      }
+
+      .result-message {
+        margin-inline: auto;
+      }
+
+      .result-stats {
+        gap: 7px;
+      }
+
+      .result-stat {
+        padding: 12px 7px;
+      }
+
+      .result-stat span {
+        font-size: 0.54rem;
+      }
+
+      .result-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .result-actions .btn-primary {
+        grid-column: 1 / -1;
+      }
+
+      .review-heading {
+        padding: 15px;
+      }
+
+      .review-list {
+        padding: 8px;
+      }
+
+      .review-item {
+        grid-template-columns: 32px minmax(0, 1fr);
+        padding: 10px;
+      }
+
+      .review-mark {
+        display: none;
+      }
+
+      .review-num {
+        width: 29px;
+        height: 29px;
+      }
+    }
+
+    @media (max-width: 410px) {
+      .score-pill {
+        min-width: 88px;
+      }
+
+      .question-counter {
+        font-size: 0.66rem;
+      }
+
+      .category-pill {
+        font-size: 0.6rem;
+        padding: 5px 9px;
+      }
+
+      .score-line {
+        gap: 7px;
+      }
+
+      .result-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .result-stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+      }
+
+      .result-stat span {
+        margin: 0;
+      }
+    }
+
+    @media (max-height: 700px) and (min-width: 681px) {
+      .quiz-shell {
+        gap: 8px;
+      }
+
+      .question-head {
+        padding: 14px 18px;
+      }
+
+      .answer {
+        min-height: 72px;
+      }
+
+      .feedback {
+        min-height: 40px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+
+      .confetti {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body data-screen="start">
+
+  <div class="ambient" aria-hidden="true">
+    <span class="math-symbol s1">π</span>
+    <span class="math-symbol s2">√</span>
+    <span class="math-symbol s3">%</span>
+    <span class="math-symbol s4">x²</span>
+    <span class="math-symbol s5">∑</span>
+  </div>
+
+  <!-- START -->
+  <section id="screen-start" class="screen start-screen is-active" aria-labelledby="mainTitle">
+    <div class="start-shell">
+
+      <div class="start-hero">
+        <div class="eyebrow">ОРТ · Кыргыз тести · Вариант 05</div>
+        <h1 id="mainTitle" class="hero-title">Математика <span>викторина</span></h1>
+        <p class="hero-lead">
+          30 суроодон турган интерактивдүү оюн. <strong>Арифметика, процент, теңдеме,
+          геометрия жана комбинаторика</strong> — билимди текшерип, упай топтоңуз.
+        </p>
+
+        <div class="hero-stats" aria-label="Оюн жөнүндө">
+          <div class="stat-chip"><b>30</b><span>суроо</span></div>
+          <div class="stat-chip"><b>30</b><span>секунд</span></div>
+          <div class="stat-chip"><b>1000</b><span>упай / суроо</span></div>
+        </div>
+
+        <div class="hero-topics">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M12 3 14.4 9.6 21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4L12 3Z" stroke-linejoin="round"/>
+          </svg>
+          <span>Ыкчам жооп берген сайын упай көбүрөөк болот</span>
+        </div>
+      </div>
+
+      <form id="startForm" class="start-card" autocomplete="off">
+        <div class="card-head">
+          <div class="logo-grid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          <span class="variant-chip">Вариант 05</span>
+        </div>
+
+        <h2>Оюнга даярсызбы?</h2>
+        <p class="card-subtitle">Атыңызды жазып, викторинаны баштаңыз.</p>
+
+        <label class="field-label" for="playerName">Оюнчунун аты <span aria-hidden="true">(милдеттүү эмес)</span></label>
+        <input id="playerName" class="name-input" type="text" maxlength="24" placeholder="Мисалы: Айбек" autocomplete="off">
+
+        <button id="startBtn" class="btn-start" type="button">
+          <span>Баштоо</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 12h15M13 6l6 6-6 6"/>
+          </svg>
+        </button>
+
+        <ul class="card-rules">
+          <li><span class="rule-dot">✓</span><span>Ар бир суроого <b>30 секунд</b> берилет.</span></li>
+          <li><span class="rule-dot">✓</span><span>Туура жооп <b>500–1000 упай</b> алып келет.</span></li>
+          <li><span class="rule-dot">✓</span><span>Жоопту баскыч же <b>1–4</b> сандары менен тандоого болот.</span></li>
+        </ul>
+      </form>
+
+    </div>
+    <p class="start-foot">Математика · ОРТ даярдык · 30 суроо</p>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="screen-quiz" class="screen quiz-screen" aria-labelledby="questionText">
+    <div class="quiz-shell">
+
+      <header class="quiz-top">
+        <div class="brand-mini" aria-label="Математика викторина">
+          <span class="logo-grid" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>Математика</span>
+        </div>
+        <div class="top-progress" role="progressbar" aria-label="Викторинанын прогресси" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0">
+          <span id="progressBar"></span>
+        </div>
+        <div id="scorePill" class="score-pill" aria-label="Упай">
+          <span>Упай</span>
+          <strong id="scoreDisplay">0</strong>
+        </div>
+      </header>
+
+      <div class="quiz-meta">
+        <span id="categoryPill" class="category-pill">Бөлчөктөр</span>
+        <span id="questionCounter" class="question-counter"><b>1</b> / 30</span>
+        <span id="streakChip" class="streak-chip" hidden>
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M13.4 2c.5 3.2-1.2 4.5-2.6 6.1-1.2 1.4-2.3 2.7-2.3 5 0 1.2.5 2.3 1.4 3-.1-1.8.7-3 1.8-4.1.1 2.5 1.3 4.5 3.1 5.8.5.4.8 1 .8 1.6 0 .9-.7 1.6-1.6 1.6H10c-3.4 0-6-2.8-6-6.2 0-2.7 1.5-4.9 3.2-6.8C9.5 5.4 11.9 3.8 13.4 2Z"/>
+          </svg>
+          <span id="streakValue">2</span>
+        </span>
+      </div>
+
+      <main class="quiz-main" id="quizMain">
+        <div class="question-head">
+          <div id="timerWrap" class="timer-wrap" aria-hidden="true">
+            <svg class="timer-svg" viewBox="0 0 100 100">
+              <circle class="timer-track" cx="50" cy="50" r="44"></circle>
+              <circle id="timerRing" class="timer-ring" cx="50" cy="50" r="44" pathLength="100"></circle>
+            </svg>
+            <div class="timer-center"><span id="timeText">30</span><small>сек</small></div>
+          </div>
+          <div class="question-copy">
+            <p class="question-label">Суроо <span id="questionLabelNumber">01</span></p>
+            <h2 id="questionText" class="question-text">5/6 − 3/4</h2>
+          </div>
+        </div>
+
+        <div id="answersGrid" class="answers" aria-label="Жооп варианттары"></div>
+
+        <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+      </main>
+
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section id="screen-results" class="screen results-screen" aria-labelledby="resultTitle">
+    <div class="results-shell">
+
+      <div class="result-card">
+        <div class="result-hero">
+          <div class="result-ring-wrap" aria-hidden="true">
+            <svg class="result-ring-svg" viewBox="0 0 120 120">
+              <defs>
+                <linearGradient id="resultGradient" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffd23f"></stop>
+                  <stop offset="55%" stop-color="#ff8a4a"></stop>
+                  <stop offset="100%" stop-color="#7c43d9"></stop>
+                </linearGradient>
+              </defs>
+              <circle class="result-ring-track" cx="60" cy="60" r="51"></circle>
+              <circle id="resultRing" class="result-ring-value" cx="60" cy="60" r="51" pathLength="100"></circle>
+            </svg>
+            <div class="result-ring-center">
+              <span id="resultPercent">0%</span>
+              <small>туура</small>
+            </div>
+          </div>
+
+          <div class="result-copy">
+            <p class="result-kicker">Оюн бүттү</p>
+            <h2 id="resultTitle" class="result-title">Жыйынтык</h2>
+            <p id="resultMessage" class="result-message"></p>
+            <p class="result-player"><span>Оюнчу</span><strong id="resultPlayer">Оюнчу</strong></p>
+          </div>
+        </div>
+
+        <div class="score-line">
+          <span>Жалпы упай</span>
+          <strong id="finalScore">0</strong>
+          <span class="score-max">/ 30 000</span>
+        </div>
+
+        <div class="result-stats">
+          <div class="result-stat"><span>Туура жооп</span><strong id="resultCorrect">0 / 30</strong></div>
+          <div class="result-stat"><span>Ката</span><strong id="resultWrong">0</strong></div>
+          <div class="result-stat"><span>Мыкты серия</span><strong id="resultStreak">0</strong></div>
+        </div>
+
+        <div class="result-actions">
+          <button id="restartBtn" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 4v6h6M20 20v-6h-6"/>
+              <path d="M5.5 15A7 7 0 1 0 7 6.5L4 10"/>
+            </svg>
+            Кайра ойноо
+          </button>
+          <button id="reviewBtn" class="btn btn-secondary" type="button" aria-expanded="false" aria-controls="reviewPanel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/>
+              <circle cx="12" cy="12" r="2.6"/>
+            </svg>
+            <span id="reviewBtnLabel">Жоопторду көрүү</span>
+          </button>
+          <button id="homeBtn" class="btn btn-ghost" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z"/>
+            </svg>
+            Башкы бет
+          </button>
+        </div>
+      </div>
+
+      <section id="reviewPanel" class="review-panel" aria-labelledby="reviewTitle" hidden>
+        <header class="review-heading">
+          <div>
+            <h2 id="reviewTitle">Жоопторду талдоо</h2>
+            <p>Ар бир суроонун туура жообу жана кыскача түшүндүрмөсү</p>
+          </div>
+          <button id="closeReviewBtn" class="btn btn-ghost" type="button" style="min-height:36px;padding:7px 11px;font-size:0.7rem;">Жабуу</button>
+        </header>
+        <div id="reviewList" class="review-list"></div>
+      </section>
+
+    </div>
+  </section>
+
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const TOTAL_TIME = 30;
+      const BASE_POINTS = 500;
+      const SPEED_POINTS = 500;
+
+      const QUESTIONS = [
+        {
+          cat: "Бөлчөктөр",
+          q: "Эсептегиле: 5/6 − 3/4",
+          options: ["1/12", "1/2", "1/24", "7/12"],
+          correct: 0,
+          explain: "5/6 = 10/12, 3/4 = 9/12. Демек, 10/12 − 9/12 = 1/12."
+        },
+        {
+          cat: "Даражалар",
+          q: "Эсептегиле: −3² − (−2)³",
+          options: ["−1", "−17", "−5", "1"],
+          correct: 0,
+          explain: "−3² = −9, (−2)³ = −8. Демек, −9 − (−8) = −9 + 8 = −1."
+        },
+        {
+          cat: "Даражалар",
+          q: "Эгерде 2ˣ⁺² − 2ˣ = 48 болсо, x канча?",
+          options: ["3", "4", "5", "6"],
+          correct: 1,
+          explain: "2ˣ⁺² = 4 · 2ˣ. Демек, 4 · 2ˣ − 2ˣ = 3 · 2ˣ = 48, 2ˣ = 16, x = 4."
+        },
+        {
+          cat: "Даражалар",
+          q: "Эсептегиле: (3²⁰ + 3¹⁹) / 3¹⁹",
+          options: ["3", "4", "9", "27"],
+          correct: 1,
+          explain: "(3²⁰ + 3¹⁹) / 3¹⁹ = 3²⁰/3¹⁹ + 3¹⁹/3¹⁹ = 3 + 1 = 4."
+        },
+        {
+          cat: "Салыштыруу",
+          q: "A = 80дин 25%ы, B = 50нин 40%ы. Салыштыргыла.",
+          options: ["A > B", "A < B", "A = B", "Аныктоо мүмкүн эмес"],
+          correct: 2,
+          explain: "A = 80 · 0,25 = 20; B = 50 · 0,40 = 20. Демек, A = B."
+        },
+        {
+          cat: "Салыштыруу",
+          q: "A = 3/7, B = 4/9. Салыштыргыла.",
+          options: ["A > B", "A < B", "A = B", "Аныктоо мүмкүн эмес"],
+          correct: 1,
+          explain: "3/7 ≈ 0,429; 4/9 ≈ 0,444. Демек, A < B."
+        },
+        {
+          cat: "Проценттер",
+          q: "240 санынын 15%ы канча?",
+          options: ["24", "32", "36", "40"],
+          correct: 2,
+          explain: "240 · 15 / 100 = 240 · 0,15 = 36."
+        },
+        {
+          cat: "Проценттер",
+          q: "Товардын баасы 1200 сом. Арзандатуу 25% болсо, жаңы баа канча?",
+          options: ["850 сом", "900 сом", "950 сом", "1000 сом"],
+          correct: 1,
+          explain: "Арзандатуу: 1200 · 0,25 = 300 сом. Жаңы баа: 1200 − 300 = 900 сом."
+        },
+        {
+          cat: "Проценттер",
+          q: "Сан 80ден 100гө чейин өстү. Өсүш канча пайызды түзөт?",
+          options: ["20%", "25%", "30%", "80%"],
+          correct: 1,
+          explain: "Өсүш: 100 − 80 = 20. Пайыз: 20 / 80 · 100% = 25%."
+        },
+        {
+          cat: "Теңдемелер",
+          q: "3x − 7 = 2x + 5 теңдемесин чыгаргыла.",
+          options: ["x = 2", "x = 10", "x = 12", "x = −12"],
+          correct: 2,
+          explain: "3x − 2x = 5 + 7, демек x = 12."
+        },
+        {
+          cat: "Теңдемелер",
+          q: "x² − 5x + 6 = 0 теңдемесинин тамырларын тапкыла.",
+          options: ["1 жана 6", "2 жана 3", "−2 жана −3", "2 жана −3"],
+          correct: 1,
+          explain: "Виеттин теоремасы боюнча: x₁ + x₂ = 5, x₁ · x₂ = 6. Демек, тамырлар 2 жана 3."
+        },
+        {
+          cat: "Бөлчөктөр",
+          q: "90дын 2/3 бөлүгү канча?",
+          options: ["30", "45", "60", "75"],
+          correct: 2,
+          explain: "90 · 2/3 = 180/3 = 60."
+        },
+        {
+          cat: "Даражалар",
+          q: "Эсептегиле: 5⁰ + 5¹ + 5²",
+          options: ["30", "31", "35", "25"],
+          correct: 1,
+          explain: "5⁰ = 1, 5¹ = 5, 5² = 25. Демек, 1 + 5 + 25 = 31."
+        },
+        {
+          cat: "Геометрия",
+          q: "Узундугу 8 см, туурасы 5 см болгон тик бурчтуктун аянты канча?",
+          options: ["13 см²", "26 см²", "40 см²", "80 см²"],
+          correct: 2,
+          explain: "Тик бурчтуктун аянты: S = a · b = 8 · 5 = 40 см²."
+        },
+        {
+          cat: "Геометрия",
+          q: "Негизи 12 см, бийиктиги 7 см болгон үч бурчтуктун аянтын тапкыла.",
+          options: ["84 см²", "42 см²", "21 см²", "19 см²"],
+          correct: 1,
+          explain: "Үч бурчтуктун аянты: S = 1/2 · a · h = 1/2 · 12 · 7 = 42 см²."
+        },
+        {
+          cat: "Геометрия",
+          q: "Радиусу 5 см болгон айлананын аянты канча?",
+          options: ["5π см²", "10π см²", "25π см²", "50π см²"],
+          correct: 2,
+          explain: "Айлананын аянты: S = πr² = π · 5² = 25π см²."
+        },
+        {
+          cat: "Геометрия",
+          q: "Алты бурчтуктун ички бурчтарынын суммасы канча градус?",
+          options: ["360°", "540°", "720°", "900°"],
+          correct: 2,
+          explain: "n бурчтук үчүн сумма: (n − 2) · 180°. Алты бурчтук үчүн: (6 − 2) · 180° = 720°."
+        },
+        {
+          cat: "Комбинаторика",
+          q: "5 китептен 2 китепти канча жол менен тандап алса болот?",
+          options: ["5", "10", "20", "25"],
+          correct: 1,
+          explain: "Тандоо тартиби маанилүү эмес: C(5,2) = 5! / (2! · 3!) = 10."
+        },
+        {
+          cat: "Комбинаторика",
+          q: "3! (үч факториал) канчага барабар?",
+          options: ["3", "6", "9", "12"],
+          correct: 1,
+          explain: "3! = 1 · 2 · 3 = 6."
+        },
+        {
+          cat: "Комбинаторика",
+          q: "1, 2, 3 цифраларынан кайталанбай турган канча үч орундуу сан түзсө болот?",
+          options: ["3", "6", "9", "27"],
+          correct: 1,
+          explain: "Бардык цифралар ар башка, кайталанбайт: 3! = 6 сан."
+        },
+        {
+          cat: "Комбинаторика",
+          q: "4 китепти текчеге канча жол менен тизе алабыз?",
+          options: ["4", "12", "16", "24"],
+          correct: 3,
+          explain: "4 китепти тизүү — бул 4 элементтин орун алмашуусу: 4! = 24."
+        },
+        {
+          cat: "Проценттер",
+          q: "200дүн 15%ынын 20%ы канча?",
+          options: ["3", "6", "10", "30"],
+          correct: 1,
+          explain: "200 · 0,15 = 30; андан кийин 30 · 0,20 = 6."
+        },
+        {
+          cat: "Бөлчөктөр",
+          q: "Эсептегиле: 7/8 ÷ 7/16",
+          options: ["1/2", "2", "4", "7/16"],
+          correct: 1,
+          explain: "7/8 ÷ 7/16 = 7/8 · 16/7 = 16/8 = 2."
+        },
+        {
+          cat: "Бөлчөктөр",
+          q: "Эсептегиле: 0,25 + 1/2",
+          options: ["1/2", "3/4", "5/8", "0,35"],
+          correct: 1,
+          explain: "0,25 = 1/4; 1/4 + 1/2 = 1/4 + 2/4 = 3/4."
+        },
+        {
+          cat: "Теңдемелер",
+          q: "2(x − 3) = 3x − 10 теңдемесин чыгаргыла.",
+          options: ["x = 4", "x = −4", "x = 7", "x = 16"],
+          correct: 0,
+          explain: "2x − 6 = 3x − 10; −6 + 10 = 3x − 2x; демек x = 4."
+        },
+        {
+          cat: "Салыштыруу",
+          q: "A = √64 + √16, B = √100 + 1. Салыштыргыла.",
+          options: ["A > B", "A < B", "A = B", "Аныктоо мүмкүн эмес"],
+          correct: 0,
+          explain: "A = 8 + 4 = 12; B = 10 + 1 = 11. Демек, A > B."
+        },
+        {
+          cat: "Салыштыруу",
+          q: "A = |−7| + |3|, B = |−10|. Салыштыргыла.",
+          options: ["A > B", "A < B", "A = B", "Аныктоо мүмкүн эмес"],
+          correct: 2,
+          explain: "A = 7 + 3 = 10; B = 10. Демек, A = B."
+        },
+        {
+          cat: "Геометрия",
+          q: "Аянты 49 см² болгон квадраттын периметри канча?",
+          options: ["14 см", "21 см", "28 см", "49 см"],
+          correct: 2,
+          explain: "Квадраттын жагы: a = √49 = 7 см. Периметр: P = 4a = 28 см."
+        },
+        {
+          cat: "Комбинаторика",
+          q: "5! (беш факториал) канчага барабар?",
+          options: ["20", "60", "120", "720"],
+          correct: 2,
+          explain: "5! = 1 · 2 · 3 · 4 · 5 = 120."
+        },
+        {
+          cat: "Комбинаторика",
+          q: "Монетаны эки жолу ыргытканда эки жолу тең «герб» түшүүнүн ыктымалдыгы канча?",
+          options: ["1/2", "1/3", "1/4", "3/4"],
+          correct: 2,
+          explain: "Мүмкүн болгон жыйынтыктар: ГГ, ГЦ, ЦГ, ЦЦ — 4. Керектүүсү бирөө: ГГ. Ыктымалдык 1/4."
+        }
+      ];
+
+      const SHAPES = [
+        '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 5.2 45 41.5H3L24 5.2Z" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path d="M24 2.8 45.2 24 24 45.2 2.8 24 24 2.8Z" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><circle cx="24" cy="24" r="20.5" fill="currentColor"/></svg>',
+        '<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect x="4.5" y="4.5" width="39" height="39" rx="5.5" fill="currentColor"/></svg>'
+      ];
+
+      const screens = {
+        start: document.getElementById("screen-start"),
+        quiz: document.getElementById("screen-quiz"),
+        results: document.getElementById("screen-results")
+      };
+
+      const els = {
+        startForm: document.getElementById("startForm"),
+        startBtn: document.getElementById("startBtn"),
+        playerName: document.getElementById("playerName"),
+        scorePill: document.getElementById("scorePill"),
+        scoreDisplay: document.getElementById("scoreDisplay"),
+        progressBar: document.getElementById("progressBar"),
+        progressWrap: document.querySelector(".top-progress"),
+        categoryPill: document.getElementById("categoryPill"),
+        questionCounter: document.getElementById("questionCounter"),
+        questionLabelNumber: document.getElementById("questionLabelNumber"),
+        streakChip: document.getElementById("streakChip"),
+        streakValue: document.getElementById("streakValue"),
+        quizMain: document.getElementById("quizMain"),
+        timerWrap: document.getElementById("timerWrap"),
+        timerRing: document.getElementById("timerRing"),
+        timeText: document.getElementById("timeText"),
+        questionText: document.getElementById("questionText"),
+        answersGrid: document.getElementById("answersGrid"),
+        feedback: document.getElementById("feedback"),
+        resultRing: document.getElementById("resultRing"),
+        resultPercent: document.getElementById("resultPercent"),
+        resultTitle: document.getElementById("resultTitle"),
+        resultMessage: document.getElementById("resultMessage"),
+        resultPlayer: document.getElementById("resultPlayer"),
+        finalScore: document.getElementById("finalScore"),
+        resultCorrect: document.getElementById("resultCorrect"),
+        resultWrong: document.getElementById("resultWrong"),
+        resultStreak: document.getElementById("resultStreak"),
+        restartBtn: document.getElementById("restartBtn"),
+        reviewBtn: document.getElementById("reviewBtn"),
+        reviewBtnLabel: document.getElementById("reviewBtnLabel"),
+        homeBtn: document.getElementById("homeBtn"),
+        reviewPanel: document.getElementById("reviewPanel"),
+        reviewList: document.getElementById("reviewList"),
+        closeReviewBtn: document.getElementById("closeReviewBtn"),
+        confetti: document.getElementById("confetti")
+      };
+
+      let state = createState();
+      let answerButtons = [];
+
+      function createState() {
+        return {
+          index: 0,
+          score: 0,
+          correct: 0,
+          streak: 0,
+          bestStreak: 0,
+          answered: false,
+          timeLeft: TOTAL_TIME,
+          deadline: 0,
+          timerId: null,
+          advanceId: null,
+          results: [],
+          player: "Оюнчу"
+        };
+      }
+
+      function formatNumber(value) {
+        return String(Math.max(0, Math.round(value))).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+      }
+
+      function showScreen(name) {
+        Object.entries(screens).forEach(([key, node]) => {
+          node.classList.toggle("is-active", key === name);
+        });
+        document.body.dataset.screen = name;
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+
+      function clearTimers() {
+        if (state.timerId !== null) {
+          clearInterval(state.timerId);
+          state.timerId = null;
+        }
+        if (state.advanceId !== null) {
+          clearTimeout(state.advanceId);
+          state.advanceId = null;
+        }
+      }
+
+      function startGame() {
+        if (document.body.dataset.screen === "quiz") {
+          return;
+        }
+
+        clearTimers();
+        const typedName = els.playerName.value.trim().replace(/\s+/g, " ").slice(0, 24);
+        state = createState();
+        state.player = typedName || "Оюнчу";
+
+        try {
+          localStorage.setItem("mathQuizPlayer", state.player);
+        } catch (error) {
+          // Локалдык сактоо жеткиликсиз болсо, оюн улантылат.
+        }
+
+        hideReview();
+        els.feedback.className = "feedback";
+        els.feedback.replaceChildren();
+        els.confetti.replaceChildren();
+        showScreen("quiz");
+        renderQuestion();
+      }
+
+      function renderQuestion() {
+        clearTimers();
+        state.answered = false;
+        state.timeLeft = TOTAL_TIME;
+
+        const question = QUESTIONS[state.index];
+
+        els.categoryPill.textContent = question.cat;
+        els.questionCounter.innerHTML = "<b>" + (state.index + 1) + "</b> / " + QUESTIONS.length;
+        els.questionLabelNumber.textContent = String(state.index + 1).padStart(2, "0");
+        els.questionText.textContent = question.q;
+        els.progressBar.style.width = ((state.index / QUESTIONS.length) * 100).toFixed(2) + "%";
+        els.progressWrap.setAttribute("aria-valuenow", String(state.index));
+        els.scoreDisplay.textContent = formatNumber(state.score);
+        els.feedback.className = "feedback";
+        els.feedback.replaceChildren();
+        els.timerWrap.classList.remove("is-danger");
+
+        if (state.streak >= 2) {
+          els.streakChip.hidden = false;
+          els.streakValue.textContent = String(state.streak);
+        } else {
+          els.streakChip.hidden = true;
+        }
+
+        buildAnswers(question);
+        updateTimerUI(TOTAL_TIME);
+
+        els.quizMain.classList.remove("q-enter");
+        void els.quizMain.offsetWidth;
+        els.quizMain.classList.add("q-enter");
+
+        startTimer();
+      }
+
+      function buildAnswers(question) {
+        els.answersGrid.replaceChildren();
+        answerButtons = question.options.map((option, index) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "answer";
+          button.dataset.index = String(index);
+          button.setAttribute("aria-label", (index + 1) + "-вариант: " + option);
+
+          const symbol = document.createElement("span");
+          symbol.className = "answer-symbol";
+          symbol.innerHTML = SHAPES[index];
+
+          const text = document.createElement("span");
+          text.className = "answer-text";
+          text.textContent = option;
+
+          const keyHint = document.createElement("span");
+          keyHint.className = "key-hint";
+          keyHint.textContent = String(index + 1);
+          keyHint.setAttribute("aria-hidden", "true");
+
+          const verdict = document.createElement("span");
+          verdict.className = "verdict";
+          verdict.setAttribute("aria-hidden", "true");
+
+          button.append(symbol, text, keyHint, verdict);
+          els.answersGrid.append(button);
+          return button;
+        });
+      }
+
+      function startTimer() {
+        state.deadline = performance.now() + TOTAL_TIME * 1000;
+        state.timerId = window.setInterval(tickTimer, 100);
+      }
+
+      function tickTimer() {
+        if (state.answered) {
+          return;
+        }
+
+        const msLeft = state.deadline - performance.now();
+        if (msLeft <= 0) {
+          state.timeLeft = 0;
+          updateTimerUI(0);
+          handleTimeout();
+          return;
+        }
+
+        state.timeLeft = msLeft / 1000;
+        updateTimerUI(state.timeLeft);
+      }
+
+      function updateTimerUI(seconds) {
+        const clamped = Math.max(0, Math.min(TOTAL_TIME, seconds));
+        els.timeText.textContent = String(Math.ceil(clamped));
+        els.timerRing.style.strokeDashoffset = String(100 - (clamped / TOTAL_TIME) * 100);
+        els.timerWrap.classList.toggle("is-danger", clamped <= 5 && clamped > 0 && !state.answered);
+      }
+
+      function handleAnswer(selectedIndex) {
+        if (state.answered) {
+          return;
+        }
+
+        const question = QUESTIONS[state.index];
+        const remaining = Math.max(0, Math.min(TOTAL_TIME, (state.deadline - performance.now()) / 1000));
+        const isCorrect = selectedIndex === question.correct;
+        const points = isCorrect
+          ? Math.round(BASE_POINTS + SPEED_POINTS * (remaining / TOTAL_TIME))
+          : 0;
+
+        state.answered = true;
+        state.timeLeft = remaining;
+        clearTimers();
+
+        if (isCorrect) {
+          state.score += points;
+          state.correct += 1;
+          state.streak += 1;
+          state.bestStreak = Math.max(state.bestStreak, state.streak);
+          bumpScore();
+        } else {
+          state.streak = 0;
+        }
+
+        state.results.push({
+          selected: selectedIndex,
+          correct: isCorrect,
+          points,
+          timeLeft: remaining
+        });
+
+        updateTimerUI(remaining);
+        els.timerWrap.classList.remove("is-danger");
+        els.scoreDisplay.textContent = formatNumber(state.score);
+
+        if (state.streak >= 2) {
+          els.streakChip.hidden = false;
+          els.streakValue.textContent = String(state.streak);
+        } else {
+          els.streakChip.hidden = true;
+        }
+
+        revealAnswers(question, selectedIndex, isCorrect);
+        showFeedback(isCorrect, points, question, false);
+        scheduleAdvance(isCorrect ? 1600 : 2500);
+      }
+
+      function handleTimeout() {
+        if (state.answered) {
+          return;
+        }
+
+        const question = QUESTIONS[state.index];
+        state.answered = true;
+        state.timeLeft = 0;
+        state.streak = 0;
+        clearTimers();
+
+        state.results.push({
+          selected: null,
+          correct: false,
+          points: 0,
+          timeLeft: 0
+        });
+
+        els.streakChip.hidden = true;
+        els.answersGrid.querySelectorAll(".answer").forEach((button) => {
+          button.disabled = true;
+        });
+
+        revealAnswers(question, null, false);
+        showFeedback(false, 0, question, true);
+        scheduleAdvance(2700);
+      }
+
+      function revealAnswers(question, selectedIndex, isCorrect) {
+        answerButtons.forEach((button, index) => {
+          button.disabled = true;
+          if (index === question.correct) {
+            button.classList.add("is-correct");
+          }
+          if (index === selectedIndex && !isCorrect) {
+            button.classList.add("is-wrong");
+          }
+          if (index !== question.correct && index !== selectedIndex) {
+            button.classList.add("is-dimmed");
+          }
+        });
+      }
+
+      function showFeedback(isCorrect, points, question, timedOut) {
+        const title = document.createElement("strong");
+        const detail = document.createElement("span");
+        const next = document.createElement("span");
+
+        next.className = "next-label";
+        next.textContent = state.index === QUESTIONS.length - 1 ? "Жыйынтык жакында..." : "Кийинки суроо...";
+
+        if (isCorrect) {
+          title.textContent = "Туура!";
+          detail.textContent = "+" + formatNumber(points) + " упай";
+          els.feedback.className = "feedback feedback--correct show";
+        } else {
+          title.textContent = timedOut ? "Убакыт бүттү!" : "Туура эмес.";
+          detail.textContent = "Туура жооп: " + question.options[question.correct];
+          els.feedback.className = "feedback feedback--wrong show";
+        }
+
+        els.feedback.replaceChildren(title, detail, next);
+      }
+
+      function bumpScore() {
+        els.scorePill.classList.remove("bump");
+        void els.scorePill.offsetWidth;
+        els.scorePill.classList.add("bump");
+      }
+
+      function scheduleAdvance(delay) {
+        state.advanceId = window.setTimeout(() => {
+          state.advanceId = null;
+          state.index += 1;
+          if (state.index >= QUESTIONS.length) {
+            finishGame();
+          } else {
+            renderQuestion();
+          }
+        }, delay);
+      }
+
+      function finishGame() {
+        clearTimers();
+        els.progressBar.style.width = "100%";
+        els.progressWrap.setAttribute("aria-valuenow", String(QUESTIONS.length));
+
+        const percent = Math.round((state.correct / QUESTIONS.length) * 100);
+        const result = getResultCopy(percent);
+
+        els.resultPercent.textContent = percent + "%";
+        els.resultTitle.textContent = result.title;
+        els.resultMessage.textContent = result.message;
+        els.resultPlayer.textContent = state.player;
+        els.resultCorrect.textContent = state.correct + " / " + QUESTIONS.length;
+        els.resultWrong.textContent = String(QUESTIONS.length - state.correct);
+        els.resultStreak.textContent = String(state.bestStreak);
+        els.finalScore.textContent = "0";
+        els.resultRing.style.strokeDashoffset = "100";
+
+        hideReview();
+        buildReview();
+        showScreen("results");
+
+        window.setTimeout(() => {
+          els.resultRing.style.strokeDashoffset = String(100 - percent);
+        }, 180);
+
+        animateScore(0, state.score, 950);
+
+        if (percent >= 60) {
+          window.setTimeout(launchConfetti, 260);
+        }
+      }
+
+      function getResultCopy(percent) {
+        if (percent === 100) {
+          return {
+            title: "Кемчиликсиз!",
+            message: "30 суроонун баары туура! Сиз математиканын чыныгы чеберисиз."
+          };
+        }
+        if (percent >= 90) {
+          return {
+            title: "Мыкты жыйынтык!",
+            message: "30 суроонун " + state.correct + " туура. ОРТга мыкты деңгээлде даярсыз!"
+          };
+        }
+        if (percent >= 70) {
+          return {
+            title: "Абдан жакшы!",
+            message: "Туура жооптор " + state.correct + "/30. Бир аз машыгуу менен дагы жогорулайсыз."
+          };
+        }
+        if (percent >= 50) {
+          return {
+            title: "Жакшы аракет!",
+            message: "Туура жооптор " + state.correct + "/30. Негизги темаларды кайталап көрүңүз."
+          };
+        }
+        return {
+          title: "Машыгуу керек!",
+          message: "Туура жооптор " + state.correct + "/30. Кайра баштап, темаларды машыктырыңыз."
+        };
+      }
+
+      function animateScore(from, to, duration) {
+        const start = performance.now();
+        const diff = to - from;
+
+        function frame(now) {
+          const progress = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          els.finalScore.textContent = formatNumber(from + diff * eased);
+          if (progress < 1) {
+            window.requestAnimationFrame(frame);
+          } else {
+            els.finalScore.textContent = formatNumber(to);
+          }
+        }
+
+        window.requestAnimationFrame(frame);
+      }
+
+      function buildReview() {
+        els.reviewList.replaceChildren();
+
+        state.results.forEach((result, index) => {
+          const question = QUESTIONS[index];
+          const item = document.createElement("article");
+          item.className = "review-item " + (result.correct ? "is-correct" : "is-wrong");
+
+          const number = document.createElement("span");
+          number.className = "review-num";
+          number.textContent = String(index + 1).padStart(2, "0");
+
+          const body = document.createElement("div");
+          body.className = "review-body";
+
+          const category = document.createElement("span");
+          category.className = "review-cat";
+          category.textContent = question.cat;
+
+          const questionText = document.createElement("p");
+          questionText.className = "review-question";
+          questionText.textContent = question.q;
+
+          const answer = document.createElement("p");
+          answer.className = "review-answer";
+          if (result.correct) {
+            answer.append("Туура: ");
+            const strong = document.createElement("b");
+            strong.textContent = question.options[question.correct];
+            answer.append(strong);
+          } else {
+            answer.append("Сиздин жообуңуз: ");
+            const bad = document.createElement("span");
+            bad.className = "bad";
+            bad.textContent = result.selected === null ? "жооп берилген жок" : question.options[result.selected];
+            answer.append(bad, " · Туура жооп: ");
+            const strong = document.createElement("b");
+            strong.textContent = question.options[question.correct];
+            answer.append(strong);
+          }
+
+          const explain = document.createElement("p");
+          explain.className = "review-explain";
+          explain.textContent = question.explain;
+
+          body.append(category, questionText, answer, explain);
+
+          const mark = document.createElement("span");
+          mark.className = "review-mark";
+          mark.setAttribute("aria-hidden", "true");
+          mark.textContent = result.correct ? "✓" : "✕";
+
+          item.append(number, body, mark);
+          els.reviewList.append(item);
+        });
+      }
+
+      function showReview() {
+        els.reviewPanel.hidden = false;
+        els.reviewBtn.setAttribute("aria-expanded", "true");
+        els.reviewBtnLabel.textContent = "Жашыруу";
+        els.reviewPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function hideReview() {
+        els.reviewPanel.hidden = true;
+        els.reviewBtn.setAttribute("aria-expanded", "false");
+        els.reviewBtnLabel.textContent = "Жоопторду көрүү";
+      }
+
+      function toggleReview() {
+        if (els.reviewPanel.hidden) {
+          showReview();
+        } else {
+          hideReview();
+        }
+      }
+
+      function launchConfetti() {
+        if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+
+        const colors = ["#ffd23f", "#ff5d73", "#58d68d", "#5dade2", "#b983ff", "#ff9f43"];
+        const fragment = document.createDocumentFragment();
+
+        for (let index = 0; index < 85; index += 1) {
+          const piece = document.createElement("i");
+          piece.className = "confetti-piece";
+          piece.style.left = Math.random() * 100 + "%";
+          piece.style.background = colors[index % colors.length];
+          piece.style.width = (6 + Math.random() * 7).toFixed(1) + "px";
+          piece.style.height = (9 + Math.random() * 10).toFixed(1) + "px";
+          piece.style.borderRadius = Math.random() > 0.55 ? "50%" : "2px";
+          piece.style.setProperty("--fall-time", (3 + Math.random() * 2.7).toFixed(2) + "s");
+          piece.style.setProperty("--delay", (Math.random() * 0.8).toFixed(2) + "s");
+          piece.style.setProperty("--drift", (Math.random() * 220 - 110).toFixed(0) + "px");
+          piece.style.setProperty("--spin", Math.round(360 + Math.random() * 900) + "deg");
+          fragment.append(piece);
+        }
+
+        els.confetti.append(fragment);
+
+        window.setTimeout(() => {
+          els.confetti.replaceChildren();
+        }, 6800);
+      }
+
+      function goHome() {
+        clearTimers();
+        hideReview();
+        els.confetti.replaceChildren();
+        showScreen("start");
+      }
+
+      function handleKeyboard(event) {
+        if (document.body.dataset.screen !== "quiz" || state.answered) {
+          return;
+        }
+
+        if (event.ctrlKey || event.metaKey || event.altKey) {
+          return;
+        }
+
+        const keyMap = {
+          "1": 0, "2": 1, "3": 2, "4": 3,
+          "a": 0, "b": 1, "c": 2, "d": 3
+        };
+        const selectedIndex = keyMap[event.key.toLowerCase()];
+
+        if (selectedIndex !== undefined) {
+          event.preventDefault();
+          handleAnswer(selectedIndex);
+        }
+      }
+
+      function init() {
+        els.startBtn.addEventListener("click", startGame);
+
+        els.startForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          startGame();
+        });
+
+        els.playerName.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            startGame();
+          }
+        });
+
+        els.answersGrid.addEventListener("click", (event) => {
+          const button = event.target.closest(".answer");
+          if (!button || button.disabled) {
+            return;
+          }
+          handleAnswer(Number(button.dataset.index));
+        });
+
+        els.restartBtn.addEventListener("click", startGame);
+        els.homeBtn.addEventListener("click", goHome);
+        els.reviewBtn.addEventListener("click", toggleReview);
+        els.closeReviewBtn.addEventListener("click", hideReview);
+        document.addEventListener("keydown", handleKeyboard);
+
+        try {
+          const savedName = localStorage.getItem("mathQuizPlayer");
+          if (savedName) {
+            els.playerName.value = savedName;
+          }
+        } catch (error) {
+          // Локалдык сактоо жеткиликсиз болсо, антпейбиз.
+        }
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
